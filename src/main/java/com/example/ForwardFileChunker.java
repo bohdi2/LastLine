@@ -1,12 +1,14 @@
 package com.example;
 
+import com.example.impl.Util;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
-class ForwardFileChunker implements Iterable<ForwardChunk> {
+class ForwardFileChunker implements Iterable<List<Long>> {
     private final int CHUNK_SIZE = 1024;
 
     private final File m_file;
@@ -15,7 +17,7 @@ class ForwardFileChunker implements Iterable<ForwardChunk> {
         m_file = file;
     }
 
-    public Iterator<ForwardChunk> iterator() {
+    public Iterator<List<Long>> iterator() {
         try {
             return new ChunkIter(m_file);
         }
@@ -24,7 +26,7 @@ class ForwardFileChunker implements Iterable<ForwardChunk> {
         }
     }
 
-    class ChunkIter implements Iterator<ForwardChunk> {
+    class ChunkIter implements Iterator<List<Long>> {
         private final RandomAccessFile m_file;
         private final byte[] m_buffer;
 
@@ -42,14 +44,14 @@ class ForwardFileChunker implements Iterable<ForwardChunk> {
             }
         }
 
-        public ForwardChunk next() {
+        public List<Long> next() {
 
             try {
                 long position = m_file.getFilePointer();
                 int size = nextChunkSize();
 
                 m_file.readFully(m_buffer, 0, size);
-                return new ForwardChunk(position, m_buffer, size);
+                return Util.getOffsets(position, m_buffer, size);
             }
             catch (IOException e) {
                 throw new NoSuchElementException();

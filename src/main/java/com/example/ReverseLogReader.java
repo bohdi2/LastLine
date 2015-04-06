@@ -3,7 +3,8 @@
 package com.example;
  
 import java.io.*;
- 
+import java.util.Iterator;
+
 public class ReverseLogReader
 {
     // use to test this class.
@@ -15,29 +16,25 @@ public class ReverseLogReader
             long start = System.currentTimeMillis();
  
             System.err.println("Reverse: " + args[0]);
+
+            Lines lines = new Lines(new File(args[0]));
+            Iterator<String> r = lines.reverseLineIterator(50);
+
+            for (int ii=0; ii<10; ii++) {
+                if (r.hasNext())
+                    System.err.format("Iterator: %s%n", r.next());
+            }
            
-            Alt alt = new Alt(new File(args[0]), 1000);
-            System.err.format("Alt: %s%n", alt.readLine());
-            System.err.format("Alt: %s%n", alt.readLine());
-            System.err.format("Alt: %s%n", alt.readLine());
-            System.err.format("Alt: %s%n", alt.readLine());
-            System.err.format("Alt: %s%n", alt.readLine());
-            System.err.format("Alt: %s%n", alt.readLine());
-            System.err.format("Alt: %s%n", alt.readLine());
-            System.err.format("Alt: %s%n", alt.readLine());
-            System.err.format("Alt: %s%n", alt.readLine());
 
-
-            alt.close();
  
             long now = System.currentTimeMillis();
             System.err.println("Time: " + (now - start));
             start = now;
  
-            ReverseLogReader r = new ReverseLogReader(args[0], 0);
+            ReverseLogReader rr = new ReverseLogReader(args[0], 0);
             System.err.format("Size: %d, Time: %s%n",
-                              r.getFileSize(),
-                              r.getLastValidTime());
+                              rr.getFileSize(),
+                              rr.getLastValidTime());
  
             now = System.currentTimeMillis();
             System.err.println("Time: " + (now - start));
@@ -176,7 +173,7 @@ public class ReverseLogReader
                 return lastLine.toString();
             } else {
                 lastLine.insert(0,new String(buffer, 0, bytesRead));
-                lastLine.delete(100, lastLine.length());
+                //lastLine.delete(100, lastLine.length());
             }
         }           
     }

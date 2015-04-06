@@ -1,45 +1,68 @@
 package com.example;
 
+import com.example.impl.EmptyIterator;
+import com.example.impl.FirstIterator;
+import com.example.impl.LastIterator;
+import com.example.impl.LineIterator;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 class Lines {
-    private final int CHUNK_SIZE = 1024;
-
-    private final byte m_buffer[];
-
     private final File m_file;
 
     public Lines(File file) {
         m_file = file;
-        m_buffer = new byte[CHUNK_SIZE];
     }
 
     public Iterator<Long> offsetIterator() {
-        return new OffsetIter();
+        if (0 != m_file.length()) {
+            return new FirstIterator(new OffsetIter());
+        }
+        else {
+            return new EmptyIterator<Long>();
+        }
     }
 
     public Iterator<Long> reverseOffsetIterator() {
-        return new ReverseOffsetIter();
+        if (0 != m_file.length()) {
+            return new LastIterator(new ReverseOffsetIter());
+        }
+        else {
+            return new EmptyIterator<Long>();
+        }
+    }
+
+    public Iterator<String> lineIterator() throws IOException {
+        return lineIterator(-1);
+    }
+
+    public Iterator<String> lineIterator(int trim) throws IOException {
+        return new LineIterator(m_file, offsetIterator(), trim);
     }
 
 
+    public Iterator<String> reverseLineIterator() throws IOException {
+        return reverseLineIterator(-1);
+    }
+
+    public Iterator<String> reverseLineIterator(int trim) throws IOException {
+        return new LineIterator(m_file, reverseOffsetIterator(), trim);
+    }
+
+
+
+
     class OffsetIter implements Iterator<Long> {
-        private Iterator<ForwardChunk> m_chunks;
+        private Iterator<List<Long>> m_chunks;
         private Iterator<Long> m_offsets;
 
         public OffsetIter() {
-            // If file is empty then it should not have an initial offset of 0
-
             m_chunks = new ForwardFileChunker(m_file).iterator();
-
-            if (0 == m_file.length()) {
-                m_offsets = new EmptyIter<Long>();
-            }
-            else {
-                m_offsets = new FirstIter();
-            }
+            m_offsets = new EmptyIterator<Long>();
         }
 
         public boolean hasNext() {
@@ -63,14 +86,12 @@ class Lines {
     }
 
     class ReverseOffsetIter implements Iterator<Long> {
-        private Iterator<ReverseChunk> m_chunks;
+        private Iterator<List<Long>> m_chunks;
         private Iterator<Long> m_offsets;
 
         public ReverseOffsetIter() {
-            // If file is empty then it should not have an initial offset of 0
-
             m_chunks = new ReverseFileChunker(m_file).iterator();
-            m_offsets = new EmptyIter<Long>();
+            m_offsets = new EmptyIterator<Long>();
         }
 
         public boolean hasNext() {
@@ -93,32 +114,9 @@ class Lines {
 
     }
 
-    class EmptyIter<T> implements Iterator<T> {
-        public boolean hasNext() {
-            return false;
-        }
-        public T next() {
-            return null;
-        }
-        public void remove() {
-            throw new UnsupportedOperationException("remove not supported");
-        }
-    }
 
-    class FirstIter implements Iterator<Long> {
-        private boolean m_hasNext = true;
 
-        public boolean hasNext() {
-            return m_hasNext;
-        }
-        public Long next() {
-            m_hasNext = false;
-            return 0L;
-        }
-        public void remove() {
-            throw new UnsupportedOperationException("remove not supported");
-        }
-    }
+
 
 
 }
