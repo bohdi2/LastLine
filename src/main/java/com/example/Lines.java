@@ -1,8 +1,6 @@
 package com.example;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -22,22 +20,71 @@ class Lines {
         return new OffsetIter();
     }
 
+    public Iterator<Long> reverseOffsetIterator() {
+        return new ReverseOffsetIter();
+    }
+
+
     class OffsetIter implements Iterator<Long> {
-        private Iterator<ForwardChunk> chunks = new ForwardFileChunker(m_file).iterator();
-        private Iterator<Long> offsets = new FirstIter();
+        private Iterator<ForwardChunk> m_chunks;
+        private Iterator<Long> m_offsets;
+
+        public OffsetIter() {
+            // If file is empty then it should not have an initial offset of 0
+
+            m_chunks = new ForwardFileChunker(m_file).iterator();
+
+            if (0 == m_file.length()) {
+                m_offsets = new EmptyIter<Long>();
+            }
+            else {
+                m_offsets = new FirstIter();
+            }
+        }
 
         public boolean hasNext() {
-            return chunks.hasNext() || offsets.hasNext();
+            return m_chunks.hasNext() || m_offsets.hasNext();
         }
 
         public Long next() {
             if (! hasNext())
                 throw new NoSuchElementException();
 
-            while (! offsets.hasNext())
-                offsets = chunks.next().iterator();
+            while (! m_offsets.hasNext())
+                m_offsets = m_chunks.next().iterator();
 
-            return offsets.next();
+            return m_offsets.next();
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException("remove not supported");
+        }
+
+    }
+
+    class ReverseOffsetIter implements Iterator<Long> {
+        private Iterator<ReverseChunk> m_chunks;
+        private Iterator<Long> m_offsets;
+
+        public ReverseOffsetIter() {
+            // If file is empty then it should not have an initial offset of 0
+
+            m_chunks = new ReverseFileChunker(m_file).iterator();
+            m_offsets = new EmptyIter<Long>();
+        }
+
+        public boolean hasNext() {
+            return m_chunks.hasNext() || m_offsets.hasNext();
+        }
+
+        public Long next() {
+            if (! hasNext())
+                throw new NoSuchElementException();
+
+            while (! m_offsets.hasNext())
+                m_offsets = m_chunks.next().iterator();
+
+            return m_offsets.next();
         }
 
         public void remove() {
@@ -65,7 +112,6 @@ class Lines {
             return m_hasNext;
         }
         public Long next() {
-            System.err.println("FirstIter.next");
             m_hasNext = false;
             return 0L;
         }
