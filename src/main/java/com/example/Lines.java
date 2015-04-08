@@ -15,7 +15,7 @@ class Lines {
         m_file = file;
     }
 
-    public Iterator<Long> offsetIterator() {
+    public FileIterator<Long> offsetIterator() {
         if (0 != m_file.length()) {
             return new FirstIterator<Long>(0L, new OffsetIter());
         }
@@ -24,7 +24,7 @@ class Lines {
         }
     }
 
-    public Iterator<Long> reverseOffsetIterator() {
+    public FileIterator<Long> reverseOffsetIterator() {
         if (0 != m_file.length()) {
             return new LastIterator<Long>(new ReverseOffsetIter(), 0L);
         }
@@ -33,28 +33,28 @@ class Lines {
         }
     }
 
-    public Iterator<String> lineIterator() throws IOException {
+    public FileIterator<String> lineIterator() throws IOException {
         return lineIterator(-1);
     }
 
-    public Iterator<String> lineIterator(int trim) throws IOException {
+    public FileIterator<String> lineIterator(int trim) throws IOException {
         return new LineIterator(m_file, offsetIterator(), trim);
     }
 
 
-    public Iterator<String> reverseLineIterator() throws IOException {
+    public FileIterator<String> reverseLineIterator() throws IOException {
         return reverseLineIterator(-1);
     }
 
-    public Iterator<String> reverseLineIterator(int trim) throws IOException {
+    public FileIterator<String> reverseLineIterator(int trim) throws IOException {
         return new LineIterator(m_file, reverseOffsetIterator(), trim);
     }
 
 
 
 
-    class OffsetIter implements Iterator<Long> {
-        private Iterator<List<Long>> m_chunks;
+    class OffsetIter implements FileIterator<Long> {
+        private FileIterator<List<Long>> m_chunks;
         private Iterator<Long> m_offsets;
 
         public OffsetIter() {
@@ -81,13 +81,13 @@ class Lines {
         }
 
         public void close() throws IOException {
-            //m_chunks.close();
+            m_chunks.close();
         }
 
     }
 
-    class ReverseOffsetIter implements Iterator<Long> {
-        private Iterator<List<Long>> m_chunks;
+    class ReverseOffsetIter implements FileIterator<Long> {
+        private FileIterator<List<Long>> m_chunks;
         private Iterator<Long> m_offsets;
 
         public ReverseOffsetIter() {
@@ -113,8 +113,8 @@ class Lines {
             throw new UnsupportedOperationException("remove not supported");
         }
 
-        public void close() {
-            //m_chunks.close();
+        public void close() throws IOException {
+            m_chunks.close();
         }
     }
 

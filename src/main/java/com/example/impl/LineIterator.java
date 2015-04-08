@@ -1,17 +1,19 @@
 package com.example.impl;
 
+import com.example.FileIterator;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class LineIterator implements Iterator<String> {
+public class LineIterator implements FileIterator<String> {
     private final RandomAccessFile m_file;
-    private final Iterator<Long> m_offsets;
+    private final FileIterator<Long> m_offsets;
     private final int m_trim;
 
-    public LineIterator(File file, Iterator<Long> offsets, int trim) throws IOException {
+    public LineIterator(File file, FileIterator<Long> offsets, int trim) throws IOException {
         m_file = new RandomAccessFile(file, "r");
         m_offsets = offsets;
         m_trim = trim;
@@ -33,5 +35,10 @@ public class LineIterator implements Iterator<String> {
 
     public void remove() {
         throw new UnsupportedOperationException("remove not supported");
+    }
+
+    public void close() throws IOException {
+        m_file.close();
+        m_offsets.close();
     }
 }

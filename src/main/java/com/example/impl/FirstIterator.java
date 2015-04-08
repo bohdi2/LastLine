@@ -1,13 +1,15 @@
 package com.example.impl;
 
-import java.util.Iterator;
+import com.example.FileIterator;
 
-public class FirstIterator<T> implements Iterator<T> {
+import java.io.IOException;
+
+public class FirstIterator<T> implements FileIterator<T> {
     private boolean m_hasFirst = true;
     private final T m_first;
-    private final Iterator<T> m_tail;
+    private final FileIterator<T> m_tail;
 
-    public FirstIterator(T first, Iterator<T> tail) {
+    public FirstIterator(T first, FileIterator<T> tail) {
         m_first = first;
         m_tail = tail;
     }
@@ -27,5 +29,9 @@ public class FirstIterator<T> implements Iterator<T> {
     }
     public void remove() {
         throw new UnsupportedOperationException("remove not supported");
+    }
+
+    public void close() throws IOException {
+        m_tail.close();
     }
 }

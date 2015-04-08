@@ -1,5 +1,6 @@
 package com.example.impl;
 
+import com.example.FileIterator;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class LastIteratorTest {
         return Arrays.asList(ss);
     }
 
-    private Iterator<String> toIterator(String ... ss) {
-        return toList(ss).iterator();
+    private FileIterator<String> toIterator(String ... ss) {
+        return new WrappedIterator(toList(ss).iterator());
     }
 }

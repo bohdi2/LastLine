@@ -1,5 +1,7 @@
 package com.example.impl;
 
+import com.example.FileIterator;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -7,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class ReverseFileChunker implements Iterable<List<Long>> {
+public class ReverseFileChunker  {
     private final int CHUNK_SIZE = 1024;
 
     private final File m_file;
@@ -16,7 +18,7 @@ public class ReverseFileChunker implements Iterable<List<Long>> {
         m_file = file;
     }
 
-    public Iterator<List<Long>> iterator() {
+    public FileIterator<List<Long>> iterator() {
         try {
             return new ReverseChunkIter(m_file);
         }
@@ -25,7 +27,7 @@ public class ReverseFileChunker implements Iterable<List<Long>> {
         }
     }
 
-    class ReverseChunkIter implements Iterator<List<Long>> {
+    class ReverseChunkIter implements FileIterator<List<Long>> {
         private final RandomAccessFile m_file;
         private final byte[] m_buffer;
 

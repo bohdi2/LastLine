@@ -1,14 +1,15 @@
 package com.example.impl;
 
-import java.util.Iterator;
+import com.example.FileIterator;
+import java.io.IOException;
 import java.util.NoSuchElementException;
 
-public class LastIterator<T> implements Iterator<T> {
+public class LastIterator<T> implements FileIterator<T> {
     private boolean m_hasLast = true;
     private final T m_last;
-    private final Iterator<T> m_head;
+    private final FileIterator<T> m_head;
 
-    public LastIterator(Iterator<T> head, T last) {
+    public LastIterator(FileIterator<T> head, T last) {
         m_last = last;
         m_head = head;
     }
@@ -32,5 +33,9 @@ public class LastIterator<T> implements Iterator<T> {
     }
     public void remove() {
         throw new UnsupportedOperationException("remove not supported");
+    }
+
+    public void close() throws IOException {
+        m_head.close();
     }
 }
