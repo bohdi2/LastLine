@@ -1,9 +1,6 @@
 package com.example;
 
-import com.example.impl.EmptyIterator;
-import com.example.impl.FirstIterator;
-import com.example.impl.LastIterator;
-import com.example.impl.LineIterator;
+import com.example.impl.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +17,7 @@ class Lines {
 
     public Iterator<Long> offsetIterator() {
         if (0 != m_file.length()) {
-            return new FirstIterator(new OffsetIter());
+            return new FirstIterator<Long>(0L, new OffsetIter());
         }
         else {
             return new EmptyIterator<Long>();
@@ -29,7 +26,7 @@ class Lines {
 
     public Iterator<Long> reverseOffsetIterator() {
         if (0 != m_file.length()) {
-            return new LastIterator(new ReverseOffsetIter());
+            return new LastIterator<Long>(new ReverseOffsetIter(), 0L);
         }
         else {
             return new EmptyIterator<Long>();

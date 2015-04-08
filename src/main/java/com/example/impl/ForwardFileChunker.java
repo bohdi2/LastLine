@@ -1,6 +1,5 @@
-package com.example;
+package com.example.impl;
 
-import com.example.impl.Util;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -8,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-class ForwardFileChunker implements Iterable<List<Long>> {
+public class ForwardFileChunker implements Iterable<List<Long>> {
     private final int CHUNK_SIZE = 1024;
 
     private final File m_file;

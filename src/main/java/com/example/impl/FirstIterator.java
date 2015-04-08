@@ -2,11 +2,13 @@ package com.example.impl;
 
 import java.util.Iterator;
 
-public class FirstIterator implements Iterator<Long> {
+public class FirstIterator<T> implements Iterator<T> {
     private boolean m_hasFirst = true;
-    private Iterator<Long> m_tail;
+    private final T m_first;
+    private final Iterator<T> m_tail;
 
-    public FirstIterator(Iterator<Long> tail) {
+    public FirstIterator(T first, Iterator<T> tail) {
+        m_first = first;
         m_tail = tail;
     }
 
@@ -14,10 +16,10 @@ public class FirstIterator implements Iterator<Long> {
         return m_hasFirst || m_tail.hasNext();
     }
 
-    public Long next() {
+    public T next() {
         if (m_hasFirst) {
             m_hasFirst = false;
-            return 0L;
+            return m_first;
         }
         else {
             return m_tail.next();

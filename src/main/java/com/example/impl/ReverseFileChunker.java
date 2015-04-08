@@ -1,6 +1,4 @@
-package com.example;
-
-import com.example.impl.Util;
+package com.example.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-class ReverseFileChunker implements Iterable<List<Long>> {
+public class ReverseFileChunker implements Iterable<List<Long>> {
     private final int CHUNK_SIZE = 1024;
 
     private final File m_file;
