@@ -62,6 +62,10 @@ public class ForwardFileChunker implements Iterable<List<Long>> {
             throw new UnsupportedOperationException("remove not supported");
         }
 
+        public void close() throws IOException {
+            m_file.close();
+        }
+
         private int nextChunkSize() throws IOException {
             long remaining = m_file.length() - m_file.getFilePointer();
 

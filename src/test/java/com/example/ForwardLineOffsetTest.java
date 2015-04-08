@@ -17,85 +17,28 @@ public class ForwardLineOffsetTest {
 
     @Test
     public void test_Forward_Basic_Functions() throws IOException {
-        File file = testFolder.newFile("file.txt");
-        BufferedWriter out = new BufferedWriter(new FileWriter(file));
-        out.write("hello\n");
-        out.write("goodbye\n");
-        out.close();
-
-        Lines chunker = new Lines(file);
-
-        Iterator<Long> ii = chunker.offsetIterator();
-
-        assertTrue("hasNext", ii.hasNext());
-        assertEquals(new Long(0), ii.next());
-
-        assertTrue("hasNext", ii.hasNext());
-        assertEquals(new Long(6), ii.next());
-
-        assertFalse("EOF: " + ii, ii.hasNext());
+        assertOffsets(testFolder, "hello\ngoodbye\n", 0, 6);
     }
 
     @Test
     public void test_Forward_Abrust_Ending() throws IOException {
-        File file = testFolder.newFile("file.txt");
-        BufferedWriter out = new BufferedWriter(new FileWriter(file));
-        out.write("hello\n");
-        out.write("goodbye");
-        out.close();
-
-        Lines chunker = new Lines(file);
-
-        Iterator<Long> ii = chunker.offsetIterator();
-
-        assertTrue("hasNext", ii.hasNext());
-        assertEquals(new Long(0), ii.next());
-
-        assertTrue("hasNext", ii.hasNext());
-        assertEquals(new Long(6), ii.next());
-
-        assertFalse("EOF: " + ii, ii.hasNext());
+        assertOffsets(testFolder, "hello\ngoodbye", 0, 6);
     }
 
     @Test
     public void test_Forward_Empty_Lines() throws IOException {
-        File file = testFolder.newFile("file.txt");
-        BufferedWriter out = new BufferedWriter(new FileWriter(file));
-        out.write("\n\n");
-        out.close();
-
-        Lines chunker = new Lines(file);
-
-        Iterator<Long> ii = chunker.offsetIterator();
-
-        assertTrue("hasNext", ii.hasNext());
-        assertEquals(new Long(0), ii.next());
-
-        assertTrue("hasNext", ii.hasNext());
-        assertEquals(new Long(1), ii.next());
-
-        assertFalse("EOF: " + ii, ii.hasNext());
+        assertOffsets(testFolder, "\n\n", 0, 1);
     }
 
     @Test
     public void test_Forward_Empty_File() throws IOException {
-        File file = testFolder.newFile("file.txt");
+        assertOffsets(testFolder, "");
 
-        Lines chunker = new Lines(file);
-
-        Iterator<Long> ii = chunker.offsetIterator();
-
-        assertFalse("hasNext", ii.hasNext());
     }
 
     @Test(expected=NoSuchElementException.class)
     public void test_Forward_Extra_Next() throws IOException {
-        File file = testFolder.newFile("file.txt");
-        BufferedWriter out = new BufferedWriter(new FileWriter(file));
-        out.write("hello\n");
-        out.write("goodbye\n");
-        out.close();
-
+        File file = Helper.createFile(testFolder, "hello\n", "goodbye\n");
 
         Iterator<Long> ii = new Lines(file).offsetIterator();
         assertEquals(new Long(0), ii.next());
@@ -103,6 +46,10 @@ public class ForwardLineOffsetTest {
         ii.next();
     }
 
+    public static void assertOffsets(TemporaryFolder folder, String contents, long ... longs) throws IOException {
+        File file = Helper.createFile(folder, contents);
 
+        Helper.assertContainsExactly(new Lines(file).offsetIterator(), longs);
+    }
 
 }

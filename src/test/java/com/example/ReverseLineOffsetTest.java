@@ -21,89 +21,37 @@ public class ReverseLineOffsetTest {
 
     @Test
     public void test_Reverse_Basic_Functions() throws IOException {
-        File file = testFolder.newFile("file.txt");
-        BufferedWriter out = new BufferedWriter(new FileWriter(file));
-        out.write("hello\n");
-        out.write("goodbye\n");
-        out.close();
-
-        Lines chunker = new Lines(file);
-
-        Iterator<Long> ii = chunker.reverseOffsetIterator();
-
-        assertTrue("hasNext", ii.hasNext());
-        assertEquals(new Long(6), ii.next());
-
-        assertTrue("hasNext", ii.hasNext());
-        assertEquals(new Long(0), ii.next());
-
-        assertFalse("EOF: " + ii, ii.hasNext());
+        assertReverseOffsets(testFolder, "hello\ngoodby\n", 6, 0);
     }
 
     @Test
     public void test_Reverse_Abrust_Ending() throws IOException {
-        File file = testFolder.newFile("file.txt");
-        BufferedWriter out = new BufferedWriter(new FileWriter(file));
-        out.write("hello\n");
-        out.write("goodbye");
-        out.close();
-
-        Lines chunker = new Lines(file);
-
-        Iterator<Long> ii = chunker.reverseOffsetIterator();
-
-        assertTrue("hasNext", ii.hasNext());
-        assertEquals(new Long(6), ii.next());
-
-        assertTrue("hasNext", ii.hasNext());
-        assertEquals(new Long(0), ii.next());
-
-        assertFalse("EOF: " + ii, ii.hasNext());
+        assertReverseOffsets(testFolder, "hello\ngoodby", 6, 0);
     }
 
     @Test
     public void test_Reverse_Empty_Lines() throws IOException {
-        File file = testFolder.newFile("file.txt");
-        BufferedWriter out = new BufferedWriter(new FileWriter(file));
-        out.write("\n\n");
-        out.close();
-
-        Lines chunker = new Lines(file);
-
-        Iterator<Long> ii = chunker.reverseOffsetIterator();
-
-        assertTrue("hasNext", ii.hasNext());
-        assertEquals(new Long(1), ii.next());
-
-        assertTrue("hasNext", ii.hasNext());
-        assertEquals(new Long(0), ii.next());
-
-        assertFalse("EOF: " + ii, ii.hasNext());
+        assertReverseOffsets(testFolder, "\n\n", 1, 0);
     }
 
     @Test
     public void test_Reverse_Empty_File() throws IOException {
-        File file = testFolder.newFile("file.txt");
-
-        Lines chunker = new Lines(file);
-
-        Iterator<Long> ii = chunker.reverseOffsetIterator();
-
-        assertFalse("hasNext", ii.hasNext());
+        assertReverseOffsets(testFolder, "");
     }
 
     @Test(expected=NoSuchElementException.class)
     public void test_Reverse_Extra_Next() throws IOException {
-        File file = testFolder.newFile("file.txt");
-        BufferedWriter out = new BufferedWriter(new FileWriter(file));
-        out.write("hello\n");
-        out.write("goodbye\n");
-        out.close();
-
+        File file = Helper.createFile(testFolder, "hello\n", "goodbye\n");
 
         Iterator<Long> ii = new Lines(file).reverseOffsetIterator();
         assertEquals(new Long(6), ii.next());
         assertEquals(new Long(0), ii.next());
         ii.next();
+    }
+
+    public static void assertReverseOffsets(TemporaryFolder folder, String contents, long ... longs) throws IOException {
+        File file = Helper.createFile(folder, contents);
+
+        Helper.assertContainsExactly(new Lines(file).reverseOffsetIterator(), longs);
     }
 }

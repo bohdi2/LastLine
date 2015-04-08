@@ -80,6 +80,10 @@ class Lines {
             throw new UnsupportedOperationException("remove not supported");
         }
 
+        public void close() throws IOException {
+            //m_chunks.close();
+        }
+
     }
 
     class ReverseOffsetIter implements Iterator<Long> {
@@ -109,6 +113,9 @@ class Lines {
             throw new UnsupportedOperationException("remove not supported");
         }
 
+        public void close() {
+            //m_chunks.close();
+        }
     }
 
 
