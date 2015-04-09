@@ -15,7 +15,7 @@ class Lines {
         m_file = file;
     }
 
-    public FileIterator<Long> offsetIterator() {
+    public FileIterator<Long> offsetIterator() throws IOException {
         if (0 != m_file.length()) {
             return new FirstIterator<Long>(0L, new OffsetIter());
         }
@@ -24,7 +24,7 @@ class Lines {
         }
     }
 
-    public FileIterator<Long> reverseOffsetIterator() {
+    public FileIterator<Long> reverseOffsetIterator() throws IOException {
         if (0 != m_file.length()) {
             return new LastIterator<Long>(new ReverseOffsetIter(), 0L);
         }
@@ -57,8 +57,8 @@ class Lines {
         private FileIterator<List<Long>> m_chunks;
         private Iterator<Long> m_offsets;
 
-        public OffsetIter() {
-            m_chunks = new ForwardFileChunker(m_file).iterator();
+        public OffsetIter() throws IOException {
+            m_chunks = ForwardFileChunker.create(m_file);
             m_offsets = new EmptyIterator<Long>();
         }
 
@@ -90,8 +90,8 @@ class Lines {
         private FileIterator<List<Long>> m_chunks;
         private Iterator<Long> m_offsets;
 
-        public ReverseOffsetIter() {
-            m_chunks = new ReverseFileChunker(m_file).iterator();
+        public ReverseOffsetIter() throws IOException {
+            m_chunks = ReverseFileChunker.create(m_file);
             m_offsets = new EmptyIterator<Long>();
         }
 

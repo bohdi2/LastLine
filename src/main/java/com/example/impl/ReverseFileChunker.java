@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class ReverseFileChunker  {
-    private final int CHUNK_SIZE = 1024;
 
     private final File m_file;
 
@@ -18,16 +17,13 @@ public class ReverseFileChunker  {
         m_file = file;
     }
 
-    public FileIterator<List<Long>> iterator() {
-        try {
-            return new ReverseChunkIter(m_file);
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public static FileIterator create(File file) throws IOException {
+        return new ReverseChunkIter(file);
     }
 
-    class ReverseChunkIter implements FileIterator<List<Long>> {
+    static class ReverseChunkIter implements FileIterator<List<Long>> {
+        private final int CHUNK_SIZE = 1024;
+
         private final RandomAccessFile m_file;
         private final byte[] m_buffer;
 

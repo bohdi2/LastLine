@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class ForwardFileChunker  {
-    private final int CHUNK_SIZE = 1024;
 
     private final File m_file;
 
@@ -17,16 +16,13 @@ public class ForwardFileChunker  {
         m_file = file;
     }
 
-    public FileIterator<List<Long>> iterator() {
-        try {
-            return new ChunkIter(m_file);
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public static FileIterator create(File file) throws IOException {
+        return new ChunkIter(file);
     }
 
-    class ChunkIter implements FileIterator<List<Long>> {
+    static class ChunkIter implements FileIterator<List<Long>> {
+        private final int CHUNK_SIZE = 1024;
+
         private final RandomAccessFile m_file;
         private final byte[] m_buffer;
 
