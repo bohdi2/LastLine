@@ -10,12 +10,6 @@ import java.util.NoSuchElementException;
 
 public class ForwardFileChunker  {
 
-    private final File m_file;
-
-    public ForwardFileChunker(File file) {
-        m_file = file;
-    }
-
     public static FileIterator create(File file) throws IOException {
         return new ChunkIter(file);
     }

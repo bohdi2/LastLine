@@ -11,12 +11,6 @@ import java.util.NoSuchElementException;
 
 public class ReverseFileChunker  {
 
-    private final File m_file;
-
-    public ReverseFileChunker(File file) {
-        m_file = file;
-    }
-
     public static FileIterator create(File file) throws IOException {
         return new ReverseChunkIter(file);
     }
