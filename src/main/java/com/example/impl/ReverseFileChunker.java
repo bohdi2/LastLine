@@ -15,11 +15,6 @@ public class ReverseFileChunker implements FileIterator<List<Long>> {
     private final RandomAccessFile m_file;
     private final byte[] m_buffer;
 
-    public static FileIterator create(File file) throws IOException {
-        return new ReverseFileChunker(file);
-    }
-
-
     public ReverseFileChunker(File file) throws IOException {
         m_file = new RandomAccessFile(file, "r");
         m_file.seek(m_file.length());

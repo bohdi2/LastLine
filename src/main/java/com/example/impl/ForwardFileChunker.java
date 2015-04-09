@@ -15,11 +15,6 @@ public class ForwardFileChunker implements FileIterator<List<Long>> {
     private final RandomAccessFile m_file;
     private final byte[] m_buffer;
 
-    public static FileIterator create(File file) throws IOException {
-        return new ForwardFileChunker(file);
-    }
-
-
     public ForwardFileChunker(File file) throws IOException {
         m_file = new RandomAccessFile(file, "r");
         m_buffer = new byte[CHUNK_SIZE];
