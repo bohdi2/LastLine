@@ -1,20 +1,19 @@
-package com.example.impl;
-
-import com.example.FileIterator;
+package org.bohdi.lines.impl;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class ForwardFileChunker implements FileIterator<List<Long>> {
+public class ForwardFileChunker implements Iterator<List<Long>> {
     private final int CHUNK_SIZE = 1024;
 
     private final RandomAccessFile m_file;
     private long m_filePosition;
     private final byte[] m_buffer;
 
-    public ForwardFileChunker(RandomAccessFile file) throws IOException {
+    public ForwardFileChunker(RandomAccessFile file) {
         m_file = file;
         m_filePosition = 0;
         m_buffer = new byte[CHUNK_SIZE];
@@ -48,10 +47,6 @@ public class ForwardFileChunker implements FileIterator<List<Long>> {
 
     public void remove() {
         throw new UnsupportedOperationException("remove not supported");
-    }
-
-    public void close() throws IOException {
-        m_file.close();
     }
 
     private int nextChunkSize() throws IOException {

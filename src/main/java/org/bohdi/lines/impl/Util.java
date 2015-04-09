@@ -1,4 +1,4 @@
-package com.example.impl;
+package org.bohdi.lines.impl;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

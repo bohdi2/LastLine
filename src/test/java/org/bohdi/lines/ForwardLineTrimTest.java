@@ -1,10 +1,9 @@
-package com.example;
+package org.bohdi.lines;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -33,7 +32,7 @@ public class ForwardLineTrimTest {
     public static void assertTrimLines(TemporaryFolder folder, String contents, String ... strings) throws IOException {
         RandomAccessFile file = Helper.createFile(folder, contents);
 
-        Helper.assertContainsExactly(new Lines(file).lineIterator(3), strings);
+        Helper.assertContainsExactly(Lines.lineIterator(file, 3), strings);
     }
 
 }

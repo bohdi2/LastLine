@@ -1,15 +1,13 @@
-package com.example.impl;
+package org.bohdi.lines.impl;
 
-import com.example.FileIterator;
+import java.util.Iterator;
 
-import java.io.IOException;
-
-public class FirstIterator<T> implements FileIterator<T> {
+public class FirstIterator<T> implements Iterator<T> {
     private boolean m_hasFirst = true;
     private final T m_first;
-    private final FileIterator<T> m_tail;
+    private final Iterator<T> m_tail;
 
-    public FirstIterator(T first, FileIterator<T> tail) {
+    public FirstIterator(T first, Iterator<T> tail) {
         m_first = first;
         m_tail = tail;
     }
@@ -31,7 +29,4 @@ public class FirstIterator<T> implements FileIterator<T> {
         throw new UnsupportedOperationException("remove not supported");
     }
 
-    public void close() throws IOException {
-        m_tail.close();
-    }
 }

@@ -1,6 +1,6 @@
-package com.example.impl;
+package org.bohdi.lines.impl;
 
-import com.example.FileIterator;
+import org.bohdi.lines.impl.FirstIterator;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -10,17 +10,18 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class LastIteratorTest {
+
+public class FirstIteratorTest {
 
     @Test
     public void test_Normal_Tail() {
-        Iterator iter = new LastIterator(toIterator("a", "b"), "c");
+        Iterator<String> iter = new FirstIterator<String>("a", toIterator("b", "c"));
         assertEquals(toList("a", "b", "c"), toList(iter));
     }
 
     @Test
     public void test_Empty_Tail() {
-        Iterator iter = new LastIterator(toIterator(), "a");
+        Iterator<String> iter = new FirstIterator<String>("a", toIterator());
         assertEquals(toList("a"), toList(iter));
     }
 
@@ -37,7 +38,7 @@ public class LastIteratorTest {
         return Arrays.asList(ss);
     }
 
-    private FileIterator<String> toIterator(String ... ss) {
-        return new WrappedIterator(toList(ss).iterator());
+    private Iterator<String> toIterator(String ... ss) {
+        return toList(ss).iterator();
     }
 }

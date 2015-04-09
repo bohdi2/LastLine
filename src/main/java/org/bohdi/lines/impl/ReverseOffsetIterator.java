@@ -1,6 +1,4 @@
-package com.example.impl;
-
-import com.example.FileIterator;
+package org.bohdi.lines.impl;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -8,12 +6,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class OffsetIterator implements FileIterator<Long> {
-    private FileIterator<List<Long>> m_chunks;
+public class ReverseOffsetIterator implements Iterator<Long> {
+    private Iterator<List<Long>> m_chunks;
     private Iterator<Long> m_offsets;
 
-    public OffsetIterator(RandomAccessFile file) throws IOException {
-        m_chunks = new ForwardFileChunker(file);
+    public ReverseOffsetIterator(RandomAccessFile file) throws IOException {
+        m_chunks = new ReverseFileChunker(file);
         m_offsets = new EmptyIterator<Long>();
     }
 
@@ -25,19 +23,14 @@ public class OffsetIterator implements FileIterator<Long> {
         if (! hasNext())
             throw new NoSuchElementException();
 
-        while (! m_offsets.hasNext()) {
+        while (! m_offsets.hasNext())
             m_offsets = m_chunks.next().iterator();
-        }
 
         return m_offsets.next();
     }
 
     public void remove() {
         throw new UnsupportedOperationException("remove not supported");
-    }
-
-    public void close() throws IOException {
-        m_chunks.close();
     }
 
 }

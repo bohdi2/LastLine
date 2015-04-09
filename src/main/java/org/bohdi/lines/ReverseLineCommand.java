@@ -1,6 +1,6 @@
 
 
-package com.example;
+package org.bohdi.lines;
  
 import java.io.*;
 import java.util.Iterator;
@@ -17,8 +17,7 @@ public class ReverseLineCommand
  
             System.err.println("Reverse: " + args[0]);
 
-            Lines lines = new Lines(new RandomAccessFile(args[0], "r"));
-            Iterator<String> r = lines.reverseLineIterator(50);
+            Iterator<String> r = Lines.reverseLineIterator(new RandomAccessFile(args[0], "r"), 50);
 
             for (int ii=0; ii<10; ii++) {
                 if (r.hasNext())

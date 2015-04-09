@@ -1,9 +1,10 @@
-package com.example;
+package org.bohdi.lines;
 
 import org.junit.rules.TemporaryFolder;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -57,9 +58,7 @@ public class Helper {
 
     public static List<String> asList(String ... ss) {
         List<String> list = new ArrayList<String>();
-
-        for (String s : ss)
-            list.add(s);
+        Collections.addAll(list, ss);
 
         return list;
     }

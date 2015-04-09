@@ -1,4 +1,4 @@
-package com.example;
+package org.bohdi.lines;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,7 +40,7 @@ public class ForwardLineOffsetTest {
     public void test_Forward_Extra_Next() throws IOException {
         RandomAccessFile file = Helper.createFile(testFolder, "hello\n", "goodbye\n");
 
-        Iterator<Long> ii = new Lines(file).offsetIterator();
+        Iterator<Long> ii = Lines.offsetIterator(file);
         assertEquals(new Long(0), ii.next());
         assertEquals(new Long(6), ii.next());
         ii.next();
@@ -49,7 +49,7 @@ public class ForwardLineOffsetTest {
     public static void assertOffsets(TemporaryFolder folder, String contents, long ... longs) throws IOException {
         RandomAccessFile file = Helper.createFile(folder, contents);
 
-        Helper.assertContainsExactly(new Lines(file).offsetIterator(), longs);
+        Helper.assertContainsExactly(Lines.offsetIterator(file), longs);
     }
 
 }

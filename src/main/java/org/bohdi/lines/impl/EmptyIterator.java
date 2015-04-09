@@ -1,9 +1,8 @@
-package com.example.impl;
+package org.bohdi.lines.impl;
 
-import com.example.FileIterator;
-import java.io.IOException;
+import java.util.Iterator;
 
-public class EmptyIterator<T> implements FileIterator<T> {
+public class EmptyIterator<T> implements Iterator<T> {
     public boolean hasNext() {
         return false;
     }
@@ -13,6 +12,5 @@ public class EmptyIterator<T> implements FileIterator<T> {
     public void remove() {
         throw new UnsupportedOperationException("remove not supported");
     }
-    public void close() throws IOException {
-            }
+
 }

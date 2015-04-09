@@ -1,13 +1,12 @@
-package com.example.impl;
-
-import com.example.FileIterator;
+package org.bohdi.lines.impl;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class ReverseFileChunker implements FileIterator<List<Long>> {
+public class ReverseFileChunker implements Iterator<List<Long>> {
     private final int CHUNK_SIZE = 1024;
 
     private final RandomAccessFile m_file;
@@ -54,10 +53,6 @@ public class ReverseFileChunker implements FileIterator<List<Long>> {
 
     public void remove() {
         throw new UnsupportedOperationException("remove not supported");
-    }
-
-    public void close() throws IOException {
-        m_file.close();
     }
 
     private int nextChunkSize() throws IOException {

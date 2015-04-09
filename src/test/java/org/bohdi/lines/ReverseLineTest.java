@@ -1,57 +1,57 @@
-package com.example;
-
+package org.bohdi.lines;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
 
 
-public class ReverseLineOffsetTest {
+public class ReverseLineTest {
     @Rule
     public TemporaryFolder testFolder= new TemporaryFolder();
 
-
-    // Reverse Iterators
-
     @Test
     public void test_Reverse_Basic_Functions() throws IOException {
-        assertReverseOffsets(testFolder, "hello\ngoodby\n", 6, 0);
+        assertReverseLines(testFolder, "hello\ngoodbye\n", "goodbye", "hello");
     }
 
     @Test
     public void test_Reverse_Abrust_Ending() throws IOException {
-        assertReverseOffsets(testFolder, "hello\ngoodby", 6, 0);
+        assertReverseLines(testFolder, "hello\ngoodbye", "goodbye", "hello");
     }
 
     @Test
     public void test_Reverse_Empty_Lines() throws IOException {
-        assertReverseOffsets(testFolder, "\n\n", 1, 0);
+        assertReverseLines(testFolder, "\n\n", "", "");
     }
 
     @Test
     public void test_Reverse_Empty_File() throws IOException {
-        assertReverseOffsets(testFolder, "");
+        assertReverseLines(testFolder, "");
     }
 
     @Test(expected=NoSuchElementException.class)
     public void test_Reverse_Extra_Next() throws IOException {
         RandomAccessFile file = Helper.createFile(testFolder, "hello\n", "goodbye\n");
 
-        Iterator<Long> ii = new Lines(file).reverseOffsetIterator();
-        assertEquals(new Long(6), ii.next());
-        assertEquals(new Long(0), ii.next());
+        Iterator<String> ii = Lines.reverseLineIterator(file);
+
+        assertEquals("goodbye", ii.next());
+        assertEquals("hello", ii.next());
+
         ii.next();
     }
 
-    public static void assertReverseOffsets(TemporaryFolder folder, String contents, long ... longs) throws IOException {
+    public static void assertReverseLines(TemporaryFolder folder, String contents, String ... strings) throws IOException {
         RandomAccessFile file = Helper.createFile(folder, contents);
 
-        Helper.assertContainsExactly(new Lines(file).reverseOffsetIterator(), longs);
+        Helper.assertContainsExactly(Lines.reverseLineIterator(file), strings);
     }
+
 }

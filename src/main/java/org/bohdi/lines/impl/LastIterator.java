@@ -1,15 +1,14 @@
-package com.example.impl;
+package org.bohdi.lines.impl;
 
-import com.example.FileIterator;
-import java.io.IOException;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class LastIterator<T> implements FileIterator<T> {
+public class LastIterator<T> implements Iterator<T> {
     private boolean m_hasLast = true;
     private final T m_last;
-    private final FileIterator<T> m_head;
+    private final Iterator<T> m_head;
 
-    public LastIterator(FileIterator<T> head, T last) {
+    public LastIterator(Iterator<T> head, T last) {
         m_last = last;
         m_head = head;
     }
@@ -35,7 +34,5 @@ public class LastIterator<T> implements FileIterator<T> {
         throw new UnsupportedOperationException("remove not supported");
     }
 
-    public void close() throws IOException {
-        m_head.close();
-    }
+
 }

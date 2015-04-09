@@ -1,10 +1,9 @@
-package com.example;
+package org.bohdi.lines;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Iterator;
@@ -41,7 +40,7 @@ public class ForwardLineTest {
     public void test_Forward_Extra_Next() throws IOException {
         RandomAccessFile file = Helper.createFile(testFolder, "hello\n", "goodbye\n");
 
-        Iterator<String> ii = new Lines(file).lineIterator();
+        Iterator<String> ii = Lines.lineIterator(file);
 
         assertEquals("hello", ii.next());
         assertEquals("goodbye", ii.next());
@@ -51,7 +50,7 @@ public class ForwardLineTest {
     public static void assertLines(TemporaryFolder folder, String contents, String ... strings) throws IOException {
         RandomAccessFile file = Helper.createFile(folder, contents);
 
-        Helper.assertContainsExactly(new Lines(file).lineIterator(), strings);
+        Helper.assertContainsExactly(Lines.lineIterator(file), strings);
     }
 
 
