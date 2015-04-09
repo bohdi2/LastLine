@@ -2,14 +2,15 @@ package com.example;
 
 import com.example.impl.*;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
 
 class Lines {
-    private final File m_file;
+    private final RandomAccessFile m_file;
 
-    public Lines(File file) {
+
+    public Lines(RandomAccessFile file) {
         m_file = file;
     }
 

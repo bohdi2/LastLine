@@ -38,7 +38,7 @@ public class ForwardLineOffsetTest {
 
     @Test(expected=NoSuchElementException.class)
     public void test_Forward_Extra_Next() throws IOException {
-        File file = Helper.createFile(testFolder, "hello\n", "goodbye\n");
+        RandomAccessFile file = Helper.createFile(testFolder, "hello\n", "goodbye\n");
 
         Iterator<Long> ii = new Lines(file).offsetIterator();
         assertEquals(new Long(0), ii.next());
@@ -47,7 +47,7 @@ public class ForwardLineOffsetTest {
     }
 
     public static void assertOffsets(TemporaryFolder folder, String contents, long ... longs) throws IOException {
-        File file = Helper.createFile(folder, contents);
+        RandomAccessFile file = Helper.createFile(folder, contents);
 
         Helper.assertContainsExactly(new Lines(file).offsetIterator(), longs);
     }

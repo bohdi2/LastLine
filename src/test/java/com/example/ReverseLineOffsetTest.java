@@ -41,7 +41,7 @@ public class ReverseLineOffsetTest {
 
     @Test(expected=NoSuchElementException.class)
     public void test_Reverse_Extra_Next() throws IOException {
-        File file = Helper.createFile(testFolder, "hello\n", "goodbye\n");
+        RandomAccessFile file = Helper.createFile(testFolder, "hello\n", "goodbye\n");
 
         Iterator<Long> ii = new Lines(file).reverseOffsetIterator();
         assertEquals(new Long(6), ii.next());
@@ -50,7 +50,7 @@ public class ReverseLineOffsetTest {
     }
 
     public static void assertReverseOffsets(TemporaryFolder folder, String contents, long ... longs) throws IOException {
-        File file = Helper.createFile(folder, contents);
+        RandomAccessFile file = Helper.createFile(folder, contents);
 
         Helper.assertContainsExactly(new Lines(file).reverseOffsetIterator(), longs);
     }

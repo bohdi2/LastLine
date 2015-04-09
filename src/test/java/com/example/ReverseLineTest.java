@@ -6,6 +6,7 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -38,7 +39,7 @@ public class ReverseLineTest {
 
     @Test(expected=NoSuchElementException.class)
     public void test_Reverse_Extra_Next() throws IOException {
-        File file = Helper.createFile(testFolder, "hello\n", "goodbye\n");
+        RandomAccessFile file = Helper.createFile(testFolder, "hello\n", "goodbye\n");
 
         Iterator<String> ii = new Lines(file).reverseLineIterator();
 
@@ -49,7 +50,7 @@ public class ReverseLineTest {
     }
 
     public static void assertReverseLines(TemporaryFolder folder, String contents, String ... strings) throws IOException {
-        File file = Helper.createFile(folder, contents);
+        RandomAccessFile file = Helper.createFile(folder, contents);
 
         Helper.assertContainsExactly(new Lines(file).reverseLineIterator(), strings);
     }

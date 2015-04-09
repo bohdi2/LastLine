@@ -17,7 +17,7 @@ public class ReverseLineCommand
  
             System.err.println("Reverse: " + args[0]);
 
-            Lines lines = new Lines(new File(args[0]));
+            Lines lines = new Lines(new RandomAccessFile(args[0], "r"));
             Iterator<String> r = lines.reverseLineIterator(50);
 
             for (int ii=0; ii<10; ii++) {

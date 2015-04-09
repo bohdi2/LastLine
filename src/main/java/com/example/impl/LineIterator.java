@@ -2,10 +2,8 @@ package com.example.impl;
 
 import com.example.FileIterator;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class LineIterator implements FileIterator<String> {
@@ -13,8 +11,8 @@ public class LineIterator implements FileIterator<String> {
     private final FileIterator<Long> m_offsets;
     private final int m_trim;
 
-    public LineIterator(File file, FileIterator<Long> offsets, int trim) throws IOException {
-        m_file = new RandomAccessFile(file, "r");
+    public LineIterator(RandomAccessFile file, FileIterator<Long> offsets, int trim) throws IOException {
+        m_file = file;
         m_offsets = offsets;
         m_trim = trim;
 

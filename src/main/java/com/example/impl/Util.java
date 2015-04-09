@@ -75,6 +75,7 @@ public class Util {
         if ((c == -1) && (input.length() == 0)) {
             return null;
         }
+
         return input.toString();
     }
 }

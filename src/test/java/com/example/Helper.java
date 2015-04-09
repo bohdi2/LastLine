@@ -2,10 +2,7 @@ package com.example;
 
 import org.junit.rules.TemporaryFolder;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,7 +13,7 @@ import static org.junit.Assert.*;
 
 public class Helper {
 
-    public static File createFile(TemporaryFolder folder, String ... ss) throws IOException {
+    public static RandomAccessFile createFile(TemporaryFolder folder, String ... ss) throws IOException {
         File file = folder.newFile("file.txt");
         BufferedWriter out = new BufferedWriter(new FileWriter(file));
 
@@ -24,7 +21,8 @@ public class Helper {
             out.write(s);
 
         out.close();
-        return file;
+
+        return new RandomAccessFile(file, "r");
     }
 
 

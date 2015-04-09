@@ -2,8 +2,8 @@ package com.example.impl;
 
 import com.example.FileIterator;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -12,7 +12,7 @@ public class OffsetIterator implements FileIterator<Long> {
     private FileIterator<List<Long>> m_chunks;
     private Iterator<Long> m_offsets;
 
-    public OffsetIterator(File file) throws IOException {
+    public OffsetIterator(RandomAccessFile file) throws IOException {
         m_chunks = new ForwardFileChunker(file);
         m_offsets = new EmptyIterator<Long>();
     }
@@ -25,8 +25,9 @@ public class OffsetIterator implements FileIterator<Long> {
         if (! hasNext())
             throw new NoSuchElementException();
 
-        while (! m_offsets.hasNext())
+        while (! m_offsets.hasNext()) {
             m_offsets = m_chunks.next().iterator();
+        }
 
         return m_offsets.next();
     }

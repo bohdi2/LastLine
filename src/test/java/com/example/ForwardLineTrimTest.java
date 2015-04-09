@@ -6,6 +6,7 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
 
 public class ForwardLineTrimTest {
@@ -30,7 +31,7 @@ public class ForwardLineTrimTest {
 
 
     public static void assertTrimLines(TemporaryFolder folder, String contents, String ... strings) throws IOException {
-        File file = Helper.createFile(folder, contents);
+        RandomAccessFile file = Helper.createFile(folder, contents);
 
         Helper.assertContainsExactly(new Lines(file).lineIterator(3), strings);
     }
